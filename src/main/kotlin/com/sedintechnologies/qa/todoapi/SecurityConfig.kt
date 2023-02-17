@@ -23,7 +23,7 @@ class SecurityConfig {
                     authz
                         .requestMatchers("/error/**","/swagger-ui/**", "/oa/**")
                         .permitAll()
-                        .requestMatchers(HttpMethod.POST,"/v3/user").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/v3/user","/v3/user/login").permitAll()
                         .anyRequest().authenticated()
                         .and()
                         .sessionManagement()
