@@ -4,6 +4,7 @@ import com.sedintechnologies.qa.todoapi.v3.security.JwtAuthenticationFilter
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
@@ -20,9 +21,10 @@ class SecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests { authz ->
                     authz
-                        .requestMatchers("/error/**","/swagger-ui/**", "/oa/**", "/v3/user","/v3/user/*")
+                        .requestMatchers("/error/**","/swagger-ui/**", "/oa/**")
                         .permitAll()
-                        .requestMatchers("/v3/todo","/v3/todo/**").authenticated()
+                        .requestMatchers(HttpMethod.POST,"/v3/user").permitAll()
+                        .anyRequest().authenticated()
                         .and()
                         .sessionManagement()
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)

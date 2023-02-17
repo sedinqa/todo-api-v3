@@ -3,6 +3,7 @@ package com.sedintechnologies.qa.todoapi.v3.controllers
 import com.sedintechnologies.qa.todoapi.v3.models.requestBodies.CreateUserBody
 import com.sedintechnologies.qa.todoapi.v3.models.responseBodies.UserResponseBody
 import com.sedintechnologies.qa.todoapi.v3.security.JwtService
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
@@ -11,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
@@ -39,6 +41,11 @@ class UserController {
         } else {
             throw ResponseStatusException(HttpStatus.FORBIDDEN,"User with provided username already exists")
         }
+    }
+    @SecurityRequirement(name = "jwtAuth")
+    @DeleteMapping
+    fun delete(@AuthenticationPrincipal userDetails: UserDetails){
+        inMemoryUserDetailsManager.deleteUser(userDetails.username)
     }
     @Throws(Exception::class)
     private fun authenticate(username: String, password: String) :UserDetails{
