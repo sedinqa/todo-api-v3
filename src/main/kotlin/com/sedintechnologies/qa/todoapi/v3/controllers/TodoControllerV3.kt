@@ -21,12 +21,12 @@ import java.util.*
 @SecurityRequirement(name = "jwtAuth")
 class TodoControllerV3(private val todoV3Repository: TodoV3Repository) {
     @GetMapping
-    fun index( @AuthenticationPrincipal userDetails: UserDetails):Iterable<TodoResponseBody> {
-        return todoV3Repository.findAllByUsername(userDetails.username).map { it.toResponseBody()}
+    fun index():Iterable<TodoResponseBody> {
+        return todoV3Repository.findAll().map { it.toResponseBody()}
     }
     @GetMapping("/{id}")
-    fun a(@PathVariable id:Long,@AuthenticationPrincipal userDetails: UserDetails): TodoResponseBody {
-        val gotTodo = todoV3Repository.findByUsernameAndId(userDetails.username,id)
+    fun a(@PathVariable id:Long): TodoResponseBody {
+        val gotTodo = todoV3Repository.findById(id)
         if (gotTodo.isPresent){
             return gotTodo.get().toResponseBody()
         } else {
@@ -42,8 +42,8 @@ class TodoControllerV3(private val todoV3Repository: TodoV3Repository) {
         return todoV2.toResponseBody()
     }
     @PutMapping("/{id}")
-    fun put(@Valid @RequestBody putTodoBody: PutTodoBody, @PathVariable id:Long, @AuthenticationPrincipal userDetails: UserDetails): TodoResponseBody {
-        val gotTodoO = todoV3Repository.findByUsernameAndId(userDetails.username,id)
+    fun put(@Valid @RequestBody putTodoBody: PutTodoBody, @PathVariable id:Long): TodoResponseBody {
+        val gotTodoO = todoV3Repository.findById(id)
         if (gotTodoO.isPresent){
             val gotTodo = gotTodoO.get()
             gotTodo.title = putTodoBody.title
@@ -56,8 +56,8 @@ class TodoControllerV3(private val todoV3Repository: TodoV3Repository) {
         }
     }
     @PatchMapping("/{id}")
-    fun patch(@Valid @RequestBody patchTodoBody: PatchTodoBody, @PathVariable id:Long, @AuthenticationPrincipal userDetails: UserDetails): TodoResponseBody {
-        val gotTodoO = todoV3Repository.findByUsernameAndId(userDetails.username,id)
+    fun patch(@Valid @RequestBody patchTodoBody: PatchTodoBody, @PathVariable id:Long): TodoResponseBody {
+        val gotTodoO = todoV3Repository.findById(id)
         if (gotTodoO.isPresent){
             val gotTodo = gotTodoO.get()
             if(!patchTodoBody.title.isNullOrEmpty() && patchTodoBody.title.isNotBlank())
@@ -72,8 +72,8 @@ class TodoControllerV3(private val todoV3Repository: TodoV3Repository) {
         }
     }
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id:Long, @AuthenticationPrincipal userDetails: UserDetails){
-        val gotTodoO = todoV3Repository.findByUsernameAndId(userDetails.username,id)
+    fun delete(@PathVariable id:Long){
+        val gotTodoO = todoV3Repository.findById(id)
         if (gotTodoO.isPresent){
             val gotTodo = gotTodoO.get()
             todoV3Repository.delete(gotTodo)
