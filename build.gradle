@@ -16,7 +16,7 @@ plugins {
 apply plugin: "kotlin-jpa"
 
 group = 'com.sedintechnologies.qa'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = '17'
 
 repositories {
