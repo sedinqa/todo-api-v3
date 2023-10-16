@@ -3,6 +3,7 @@ package com.sedintechnologies.qa.todoapi
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.server.ResponseStatusException
@@ -16,6 +17,18 @@ class CustomControllerAdvice {
         return ResponseEntity(
             ErrorResponse(
                 HttpStatus.BAD_REQUEST,
+                e.message
+            ),
+            HttpStatus.BAD_REQUEST
+        )
+    }
+    @ExceptionHandler(UsernameNotFoundException::class) // exception handled
+    fun handleLoginErrors(
+        e: HttpMessageNotReadableException
+    ): ResponseEntity<ErrorResponse?>? {
+        return ResponseEntity(
+            ErrorResponse(
+                HttpStatus.NOT_FOUND,
                 e.message
             ),
             HttpStatus.BAD_REQUEST
