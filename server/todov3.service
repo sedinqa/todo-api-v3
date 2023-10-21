@@ -10,9 +10,9 @@ ExecStart=/usr/bin/java -jar todo-api-v3-0.0.1.jar
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=todov3
+SyslogIdentifier=todo-api-v3
 WorkingDirectory=/home/ec2-user/gh/todo-api-v3
-Environment="PORT=9002"
+Environment="PORT=9052"
 
 [Install]
 WantedBy=multi-user.target
